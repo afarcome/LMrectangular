@@ -10,11 +10,17 @@ The following libraries shall be installed in R before using code from
 this project:
 
 library(snipEM)
+
 library(mvtnorm)
+
 library(mclust)
+
 library(compiler)
+
 library(foreach)
+
 library(doSNOW)
+
 library(xtable)
 
 Code for the general methods, with a readme giving explanations, is in folder. 

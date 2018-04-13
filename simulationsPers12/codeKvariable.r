@@ -108,7 +108,7 @@ n=nrow(y)
 Ti=ncol(y)
 r=dim(y)[3]
 
-xi=array(NA,c(kmax,kmax,3)) 
+xi=array(NA,c(kmax,kmax,r)) 
 sigma=xi
 
 pi=array(NA,c(kmax,kmax))
@@ -195,7 +195,7 @@ if(all(k==1)) {
 xi=apply(y,3,mean)
 sigma=apply(y,3,sd)
 lkold=lik
-lik=dmvnorm(matrix(y,ncol=3),xi,diag(sigma^2),log=TRUE)
+lik=dmvnorm(matrix(y,ncol=r),xi,diag(sigma^2),log=TRUE)
 
 }
 
@@ -344,7 +344,7 @@ if(all(k==1)) {
 
 xi=apply(y,3,mean)
 sigma=apply(y,3,sd)
-lik=dmvnorm(matrix(y,ncol=3),xi,diag(sigma^2),log=TRUE)
+lik=dmvnorm(matrix(y,ncol=r),xi,diag(sigma^2),log=TRUE)
 aic=-2*lik+2*2*r
 bic=-2*lik+log(n)*2*r
 
