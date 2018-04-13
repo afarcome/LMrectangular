@@ -15,7 +15,7 @@ T: number of measurement occasions, r: number of outcomes
 k: vector of T integers indicating the number of groups at each
 measurement occasion
 
-tol: tolerance for convergence in the objective function (default: 1e-4)
+tol: tolerance for convergence in the objective function (default: 1e-4). Note: in case you get a "Not Summable!" error, consider decreasing tolerance or scaling data appropriately. 
 
 maxit: maximal number of iterations of the EM (default: Inf)
 
@@ -87,10 +87,10 @@ Di: parameter D for acceptance probability. Defaults to NULL, which
 gives the optimal acceptance probability. Set a different value at
 your own risk. 
 
-cmax: number of candidate EM iterations. Defaults to 1, as stated in
-the paper. Modify at your own risk (our experience suggests that
-cmax>1 leads to a slower algorithm with lower likelihood of finding
-the global optimum)
+cmax: number of candidate EM iterations-1. Defaults to 1, that is, no
+candidate EM iterations: only the current initial candidate solution
+is considered. If cmax>1, the current initial candidate solution is
+improved through cmax-1 candidate EM iterations. 
 
 The function returns a list with elements as that of rlm.fixed, plus
 
