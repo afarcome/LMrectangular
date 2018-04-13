@@ -23,11 +23,12 @@ library(doSNOW)
 
 library(xtable)
 
-Code for the general methods, with a readme giving explanations, is in folder. 
+Code for the general methods, with a readme giving explanations, is in folder mainCode. 
 
 To reproduce the main simulation studies in the paper, please read the
 readme files and execute code in folders: simulationsPers12, simulationsPers10, simulationsPers8. 
 
-To reproduce the sensitivity analyses with respect to B and lambda, please 
+To reproduce the sensitivity analyses with respect to B and lambda, please refer to folders sensitivityB and sensitivityLambda
 
-To download the data and/or reproduce the data analysis, please 
+To download the data and/or reproduce the data analysis, please refer ti folder dataAnalysis
+
