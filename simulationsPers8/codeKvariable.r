@@ -4,13 +4,14 @@ source("codeKfixedLOG.r")
 source("chooseD.r")
 obj=function(x,lambda,xi,sigma,k,kmax,n,Ti,pi,PI,done) {
 
+if(k[1]>1) {
 pi[k[1],2:k[1]]=exp(x[1:(k[1]-1)])/(1+sum(exp(x[1:(k[1]-1)])))
 pi[k[1],1]=1-sum(pi[k[1],2:k[1]])
 if(any(pi[k[1],1:k[1]]==0)) {
 w0=which(pi[k[1],]==0)
 pi[k[1],w0]=1e-16
 pi[k[1],1:k[1]]=pi[k[1],1:k[1]]/sum(pi[k[1],1:k[1]])}
-x=x[-c(1:(k[1]-1))]
+x=x[-c(1:(k[1]-1))]}
 for(itd in 1:nrow(done)) {
 j=done[itd,1]
 h=done[itd,2]
