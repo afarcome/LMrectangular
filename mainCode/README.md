@@ -70,7 +70,7 @@ liks: individual contributions to the likelihood
 The other main function is 
 
 rlm(y, lambda, kmax, B = 200, Di = NULL, cmax = 1, tol = 1e-04, 
-    maxit = Inf, inits = NULL, verbose = FALSE, debug = FALSE) 
+    maxit = Inf, hits = 20 , inits = NULL, verbose = FALSE, debug = FALSE) 
 
 which can be used to fit a rectangular latent Markov models by optimizing a penalized likelihood as described in the paper, in order to simultaneously estimate 
 the parameters and the sequence of number of latent groups. 
@@ -91,6 +91,8 @@ cmax: number of candidate EM iterations-1. Defaults to 1, that is, no
 candidate EM iterations: only the current initial candidate solution
 is considered. If cmax>1, the current initial candidate solution is
 improved through cmax-1 candidate EM iterations. 
+
+hits: number of iterations of the optim numerical optimizer for updating pi and PI at each step (ignored when lambda=0). Defaults to 20. 
 
 The function returns a list with elements as that of rlm.fixed, plus
 

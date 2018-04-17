@@ -103,7 +103,7 @@ qub[,t,c]=apply(cbind(qub[,t,c],jnk),1,sumlog)
 
 return(list(lik=res,liks=liks,qub=qub,qu=qu))}
 
-rlm=function(y,lambda,kmax,B=200,Di=NULL,cmax=1,tol=1e-4,maxit=Inf,inits=NULL,verbose=FALSE,debug=FALSE) {
+rlm=function(y,lambda,kmax,B=200,Di=NULL,cmax=1,tol=1e-4,maxit=Inf,hits=20,inits=NULL,verbose=FALSE,debug=FALSE) {
 
 n=nrow(y)
 Ti=ncol(y)
@@ -188,7 +188,8 @@ lik=lik+lambda*n*sum(jnk2*log(jnk2))
 
 lkold=lik*2 
 iters=1
-flagK=TRUE
+    flagK=TRUE
+    Z=array(0,c(kmax,kmax,kmax,kmax))
 while(lik-lkold>tol & iters<maxit) {
 
 if(all(k==1)) {
@@ -201,7 +202,9 @@ lik=dmvnorm(matrix(y,ncol=r),xi,diag(sigma^2),log=TRUE)
 }
 
 if(any(k>1)) {
-if(verbose) {print("## update pi & PI")}
+    if(verbose) {print("## update pi & PI")}
+
+    if(lambda>0) {
 done=NULL
 initM=log(pi[k[1],2:k[1]]/pi[k[1],1])
 for(j in 1:kmax) {
@@ -215,7 +218,7 @@ initM=c(initM,log(PI[j,h,ku,2:h]/PI[j,h,ku,1]))
 }}}}
 
 op=try(optim(initM,obj,lambda=lambda,xi=xi, sigma=sigma, k=k, kmax=kmax, n=n, Ti=Ti,
-pi=pi, PI=PI, done=done, control=list(maxit=20)),silent=!debug)
+pi=pi, PI=PI, done=done, control=list(maxit=hits)),silent=!debug)
 x=initM
 if(!inherits(op,"try-error")){x=op$par}
 
@@ -239,7 +242,38 @@ PI[j,h,ku,w0]=1e-16
 PI[j,h,ku,1:h]=PI[j,h,ku,1:h]/sum(PI[j,h,ku,1:h])}}
 x=x[-c(1:(j*(h-1)))]
 }
+    }
 
+
+    if(lambda==0) {
+
+for(j in 1:kmax) {
+for(h in 1:kmax) {
+trans=k[-Ti]==j & k[-1]==h 
+if(any(trans)) {
+wtrans=which(trans)
+for(c in 1:j) {
+for(d in 1:h) {
+sw=matrix(y[,wtrans+1,],ncol=r)
+ap=matrix(dmvnorm(sw,xi[h,d,],diag(sigma[h,d,]^2),log=TRUE),ncol=length(wtrans),byrow=FALSE)
+Z[j,h,c,d]=sumlog(log(PI[j,h,c,d])+sweep(qu[,wtrans,c]+qub[,wtrans+1,d]+ap,1,liks))}}
+}}}
+
+if(k[1]>1) {
+pi[k[1],1:k[1]]=apply(V[,1,1:k[1]],2,sum)
+pi[k[1],]=pi[k[1],]/sum(pi[k[1],1:k[1]])
+}
+for(j in 1:kmax) {
+for(h in 1:kmax) {
+trans=k[-Ti]==j & k[-1]==h 
+if(any(trans)) {
+if(j>1 & h>1) {
+PI[j,h,1:j,1:h]=exp(sweep(Z[j,h,1:j,1:h],1,apply(Z[j,h,1:j,1:h],1,sumlog)))}
+if(j==1) {
+PI[j,h,1,1:h]=exp(Z[j,h,1,1:h]-sumlog(Z[j,h,1,1:h]))}
+}}}
+
+    }
 if(verbose) {print("## update xi & sigma")}
 
 for(ks in unique(k)) {
