@@ -92,7 +92,7 @@ candidate EM iterations: only the current initial candidate solution
 is considered. If cmax>1, the current initial candidate solution is
 improved through cmax-1 candidate EM iterations. 
 
-hits: number of iterations of the optim numerical optimizer for updating pi and PI at each step (ignored when lambda=0). Defaults to 20. 
+hits: number of iterations of the optim numerical optimizer for updating pi and PI at each step (ignored when lambda=0). Defaults to 20. Increase if any element of pi or PI at convergence is equal to the inits. 
 
 The function returns a list with elements as that of rlm.fixed, plus
 
