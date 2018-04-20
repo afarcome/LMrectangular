@@ -132,7 +132,7 @@ sw=matrix(y[,wtrans+1,],ncol=r)
 ap=matrix(dmvnorm(sw,xi[h,d,],diag(sigma[h,d,]^2),log=TRUE),ncol=length(wtrans),byrow=FALSE)
 Z[j,h,c,d]=sumlog(log(PI[j,h,c,d])+sweep(qu[,wtrans,c]+qub[,wtrans+1,d]+ap,1,liks))}}
 }}}
-
+PI[PI<1e-32]=1e-32
 lkold=lik*2 
 iters=1
 if(is.null(exceed)) {exceed=Inf}
@@ -159,6 +159,7 @@ PI[j,h,1:j,1:h]=exp(sweep(Z[j,h,1:j,1:h],1,apply(Z[j,h,1:j,1:h],1,sumlog)))}
 if(j==1) {
 PI[j,h,1,1:h]=exp(Z[j,h,1,1:h]-sumlog(Z[j,h,1,1:h]))}
 }}}
+PI[PI<1e-32]=1e-32   
 if(debug) {
 lkpartold=lkpartial
 lkpartial=likco.fixed(xi,sigma,pi,PI,k,kmax,n,Ti)$lik

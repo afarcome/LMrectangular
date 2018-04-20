@@ -25,6 +25,7 @@ PI[j,h,ku,w0]=1e-16
 PI[j,h,ku,1:h]=PI[j,h,ku,1:h]/sum(PI[j,h,ku,1:h])}}
 x=x[-c(1:(j*(h-1)))]
 }
+PI[PI<1e-64]=1e-64
 -forw(xi,sigma,pi,PI,k,kmax,n,Ti,lambda)}
 
 forw=function(xi,sigma,pi,PI,k,kmax,n,Ti,lambda) {

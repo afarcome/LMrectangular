@@ -13,7 +13,7 @@ library(snipEM)
 
 library(mvtnorm)
 
-library(mclust)
+library(mclust) # for reproducibility reasons, use version 5.3 
 
 library(compiler)
 

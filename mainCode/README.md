@@ -15,7 +15,7 @@ T: number of measurement occasions, r: number of outcomes
 k: vector of T integers indicating the number of groups at each
 measurement occasion
 
-tol: tolerance for convergence in the objective function (default: 1e-4). Note: in case you get a "Not Summable!" error, consider decreasing tolerance or scaling data appropriately. 
+tol: tolerance for convergence in the objective function (default: 1e-4). Note: in case you get a "Not Summable!" error, consider decreasing tolerance and/or scaling data appropriately. 
 
 maxit: maximal number of iterations of the EM (default: Inf)
 
@@ -31,7 +31,7 @@ provided. Defaults to FALSE.
 debug: if TRUE, some more information, mostly for internal checking of
 errors, is provided. Defaults to FALSE
 
-exceed: if lik>exceed, stop iterations. Mostly for internal
+exceed: if lik is larger than exceed, stop iterations. Mostly for internal
 use. Defaults to NULL, mapping to Inf. 
 
 The rlm.fixed function returns a list with elements:

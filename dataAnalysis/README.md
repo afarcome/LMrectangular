@@ -32,5 +32,19 @@ penalty parameter x[i]
 
 crit: (lik[i]-lik[i-1])/(mean(lik)(x[i]-x[i-1])), where x[min(crit)+1] is the optimal lambda as defined in the paper
 
+A few notes: 
+
+-- in this reproducible example we have used two simple deterministic starting solutions for each lambda (one when lambda=0) for demonstrative purposes. The same (seemingly optimal) solution is obtained after trying several different starting solutions. 
+
+-- these data set actually makes a good example of basically all problems that can occurr with rlm and rlm.fixed: 
+
+a) latent transitions are unlikely, making some PI[,,i,j] close to zero when i!=j. This might lead the code to numerical issues, and can be avoided using a high tolerance for convergence 
+
+b) probably due to the low sample size, local optima are likely, especially 
+for the non-penalized case lambda=0. The optimal solution for rlm has 
+k=444433, but a closely sub-optimal good one is often obtained that has 
+k=444333. Compare the results of rlm.fixed when k=444444, k=444333 and k=444433!
+
+c) probably due to the large number of clusters in the face of a low sample size, the likelihood is not very steep as a function of PI. This results in certain values of PI not being updated much at the M step (when lambda>0), unless hits is slightly increased for its default. 
 
 
