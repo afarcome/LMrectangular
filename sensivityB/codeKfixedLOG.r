@@ -13,7 +13,9 @@ for(j in 1:k[t]) {
 if(k[t-1]>1) {
 qu[,t,j]=(qu[,t-1,1]+log(PI[k[t-1],k[t],1,j]))
 for(d in 2:k[t-1]) {
-qu[,t,j]=apply(cbind(qu[,t,j],(qu[,t-1,d]+log(PI[k[t-1],k[t],d,j]))),1,sumlog)}
+    cb=cbind(qu[,t,j],(qu[,t-1,d]+log(PI[k[t-1],k[t],d,j])))
+    cb[ cb < -700]=-700
+qu[,t,j]=apply(cb,1,sumlog)}
 qu[,t,j]=qu[,t,j]+dmvnorm(y[,t,],xi[k[t],j,],diag(sigma[k[t],j,]^2),log=TRUE)}
 
 
@@ -23,8 +25,10 @@ qu[,t,j]=dmvnorm(y[,t,],xi[k[t],j,],diag(sigma[k[t],j,]^2),log=TRUE)+qu[,t-1,1]+
 
 }}
 
-if(k[Ti]>1) {
-liks=apply(qu[,Ti,1:k[Ti]],1,sumlog)}
+    if(k[Ti]>1) {
+        cb=qu[,Ti,1:k[Ti]]
+        cb[ cb < -700]=-700
+liks=apply(cb,1,sumlog)}
 if(k[Ti]==1) {liks=qu[,Ti,1]}
 res=sum(liks)
 
@@ -35,8 +39,10 @@ for(c in 1:k[t]) {
 qub[,t,c]=dmvnorm(y[,t+1,],xi[k[t+1],1,],diag(sigma[k[t+1],1,]^2),log=TRUE)+qub[,t+1,1]+log(PI[k[t],k[t+1],c,1])
 if(k[t+1]>1) {
 for(j in 2:k[t+1]) {
-jnk=dmvnorm(y[,t+1,],xi[k[t+1],j,],diag(sigma[k[t+1],j,]^2),log=TRUE)+qub[,t+1,j]+log(PI[k[t],k[t+1],c,j])
-qub[,t,c]=apply(cbind(qub[,t,c],jnk),1,sumlog)
+    jnk=dmvnorm(y[,t+1,],xi[k[t+1],j,],diag(sigma[k[t+1],j,]^2),log=TRUE)+qub[,t+1,j]+log(PI[k[t],k[t+1],c,j])
+    cb=cbind(qub[,t,c],jnk)
+    cb[ cb < -700]=-700
+qub[,t,c]=apply(cb,1,sumlog)
 }}}}
 
 return(list(lik=res,liks=liks,qub=qub,qu=qu))}
@@ -52,7 +58,7 @@ if(all(k==1)) {
 
 xi=apply(y,3,mean)
 sigma=apply(y,3,sd)
-lik=dmvnorm(matrix(y,ncol=r),xi,diag(sigma^2),log=TRUE)
+lik=sum(dmvnorm(matrix(y,ncol=r),xi,diag(sigma^2),log=TRUE))
 aic=-2*lik+2*2*r
 bic=-2*lik+log(n)*2*r
 return(list(V=array(1,c(n,Ti,1)),pi=1,PI=1,xi=xi,sigma=sigma,lik=lik,aic=aic,bic=bic))
@@ -132,7 +138,7 @@ sw=matrix(y[,wtrans+1,],ncol=r)
 ap=matrix(dmvnorm(sw,xi[h,d,],diag(sigma[h,d,]^2),log=TRUE),ncol=length(wtrans),byrow=FALSE)
 Z[j,h,c,d]=sumlog(log(PI[j,h,c,d])+sweep(qu[,wtrans,c]+qub[,wtrans+1,d]+ap,1,liks))}}
 }}}
-
+PI[PI<1e-32]=1e-32
 lkold=lik*2 
 iters=1
 if(is.null(exceed)) {exceed=Inf}
@@ -159,6 +165,7 @@ PI[j,h,1:j,1:h]=exp(sweep(Z[j,h,1:j,1:h],1,apply(Z[j,h,1:j,1:h],1,sumlog)))}
 if(j==1) {
 PI[j,h,1,1:h]=exp(Z[j,h,1,1:h]-sumlog(Z[j,h,1,1:h]))}
 }}}
+PI[PI<1e-32]=1e-32   
 if(debug) {
 lkpartold=lkpartial
 lkpartial=likco.fixed(xi,sigma,pi,PI,k,kmax,n,Ti)$lik

@@ -9,7 +9,7 @@ pi[k[1],2:k[1]]=exp(x[1:(k[1]-1)])/(1+sum(exp(x[1:(k[1]-1)])))
 pi[k[1],1]=1-sum(pi[k[1],2:k[1]])
 if(any(pi[k[1],1:k[1]]==0)) {
 w0=which(pi[k[1],]==0)
-pi[k[1],w0]=1e-16
+pi[k[1],w0]=1e-306
 pi[k[1],1:k[1]]=pi[k[1],1:k[1]]/sum(pi[k[1],1:k[1]])}
 x=x[-c(1:(k[1]-1))]}
 for(itd in 1:nrow(done)) {
@@ -21,10 +21,11 @@ PI[j,h,ku,2:h]=exp(jnk)/(1+sum(exp(jnk)))
 PI[j,h,ku,1]=1-sum(PI[j,h,ku,2:h])
 if(any(PI[j,h,ku,1:h]==0)) {
 w0=which(PI[j,h,ku,1:h]==0)
-PI[j,h,ku,w0]=1e-16
+PI[j,h,ku,w0]=1e-306
 PI[j,h,ku,1:h]=PI[j,h,ku,1:h]/sum(PI[j,h,ku,1:h])}}
 x=x[-c(1:(j*(h-1)))]
 }
+PI[PI<1e-306]=1e-306
 -forw(xi,sigma,pi,PI,k,kmax,n,Ti,lambda)}
 
 forw=function(xi,sigma,pi,PI,k,kmax,n,Ti,lambda) {
@@ -39,7 +40,9 @@ for(j in 1:k[t]) {
 if(k[t-1]>1) {
 qu[,t,j]=(qu[,t-1,1]+log(PI[k[t-1],k[t],1,j]))
 for(d in 2:k[t-1]) {
-qu[,t,j]=apply(cbind(qu[,t,j],(qu[,t-1,d]+log(PI[k[t-1],k[t],d,j]))),1,sumlog)}
+    cb=cbind(qu[,t,j],(qu[,t-1,d]+log(PI[k[t-1],k[t],d,j])))
+    cb[cb < -700]=-700
+qu[,t,j]=apply(cb,1,sumlog)}
 qu[,t,j]=qu[,t,j]+dmvnorm(y[,t,],xi[k[t],j,],diag(sigma[k[t],j,]^2),log=TRUE)}
 
 
@@ -49,8 +52,10 @@ qu[,t,j]=dmvnorm(y[,t,],xi[k[t],j,],diag(sigma[k[t],j,]^2),log=TRUE)+qu[,t-1,1]+
 
 }}
 
-if(k[Ti]>1) {
-liks=apply(qu[,Ti,1:k[Ti]],1,sumlog)}
+    if(k[Ti]>1) {
+        cb=qu[,Ti,1:k[Ti]]
+        cb[cb < -700]=-700
+liks=apply(cb,1,sumlog)}
 if(k[Ti]==1) {liks=qu[,Ti,1]}
 lik=sum(liks)
 jnk=pi[k[1],1:k[1]]
@@ -75,7 +80,9 @@ for(j in 1:k[t]) {
 if(k[t-1]>1) {
 qu[,t,j]=(qu[,t-1,1]+log(PI[k[t-1],k[t],1,j]))
 for(d in 2:k[t-1]) {
-qu[,t,j]=apply(cbind(qu[,t,j],(qu[,t-1,d]+log(PI[k[t-1],k[t],d,j]))),1,sumlog)}
+    cb=cbind(qu[,t,j],(qu[,t-1,d]+log(PI[k[t-1],k[t],d,j])))
+    cb[cb< -700]=-700
+qu[,t,j]=apply(cb,1,sumlog)}
 qu[,t,j]=qu[,t,j]+dmvnorm(y[,t,],xi[k[t],j,],diag(sigma[k[t],j,]^2),log=TRUE)}
 
 
@@ -85,8 +92,10 @@ qu[,t,j]=dmvnorm(y[,t,],xi[k[t],j,],diag(sigma[k[t],j,]^2),log=TRUE)+qu[,t-1,1]+
 
 }}
 
-if(k[Ti]>1) {
-liks=apply(qu[,Ti,1:k[Ti]],1,sumlog)}
+    if(k[Ti]>1) {
+        cb=qu[,Ti,1:k[Ti]]
+        cb[cb < -700]=-700
+liks=apply(cb,1,sumlog)}
 if(k[Ti]==1) {liks=qu[,Ti,1]}
 res=sum(liks)
 
@@ -97,8 +106,10 @@ for(c in 1:k[t]) {
 qub[,t,c]=dmvnorm(y[,t+1,],xi[k[t+1],1,],diag(sigma[k[t+1],1,]^2),log=TRUE)+qub[,t+1,1]+log(PI[k[t],k[t+1],c,1])
 if(k[t+1]>1) {
 for(j in 2:k[t+1]) {
-jnk=dmvnorm(y[,t+1,],xi[k[t+1],j,],diag(sigma[k[t+1],j,]^2),log=TRUE)+qub[,t+1,j]+log(PI[k[t],k[t+1],c,j])
-qub[,t,c]=apply(cbind(qub[,t,c],jnk),1,sumlog)
+    jnk=dmvnorm(y[,t+1,],xi[k[t+1],j,],diag(sigma[k[t+1],j,]^2),log=TRUE)+qub[,t+1,j]+log(PI[k[t],k[t+1],c,j])
+    cb=cbind(qub[,t,c],jnk)
+    cb[cb < -700]=-700
+qub[,t,c]=apply(cb,1,sumlog)
 }}}}
 
 return(list(lik=res,liks=liks,qub=qub,qu=qu))}
