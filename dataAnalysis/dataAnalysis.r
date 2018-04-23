@@ -16,28 +16,21 @@ x=c(0,0.05,0.1,0.15,0.2,0.25,0.3,0.35,0.4,0.45,0.5)
 library(snipEM)
 library(mvtnorm)
 set.seed(12345)
-kmax=4
+
 rl=list()
 
 inits0=rlm.fixed(y,c(4,4,4,3,3,3))
 inits0$k=rep(4,6)
-rl[[1]]=rlm(y,0,4,inits=inits0)
-save.image()
-for(whl in 2:length(x)) {
 
-lambd=x[whl]
-rlopt=rlm(y,lambd,4)
-rlcand=rlm(y,lambd,4,hits=50,inits=rlopt)
-    if(rlcand$lik>rlopt$lik) {rlopt=rlcand}
-rlcand2=rlm(y,lambd,4,inits=rl[[whl-1]])
-    if(rlcand2$lik>rlopt$lik) {rlopt=rlcand2}
-rl[[whl]]=rlopt}
+rl[[1]]=rlm(y,0,4,inits=inits0)
+
+for(whl in 2:length(x)) {
+    inits=rl[[whl-1]]
+    inits$k=rep(3,6)
+    rl[[whl]]=rlm(y,x[whl],4,inits=inits,hits=50)
+}
 
 liks=sapply(1:length(x),function(j) rl[[j]]$lik)
 crit=diff(liks)/(mean(liks)*diff(x))
-
-pdf("scree.pdf")
-plot(x,liks,type="l",xlab="lambda",ylab="pLik")
-dev.off()
 
 save.image(file="rl.rda")

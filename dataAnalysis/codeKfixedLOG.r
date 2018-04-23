@@ -14,7 +14,7 @@ if(k[t-1]>1) {
 qu[,t,j]=(qu[,t-1,1]+log(PI[k[t-1],k[t],1,j]))
 for(d in 2:k[t-1]) {
     cb=cbind(qu[,t,j],(qu[,t-1,d]+log(PI[k[t-1],k[t],d,j])))
-    cb[ cb < -743.7]=-743.7
+    cb[ cb < -700]=-700
 qu[,t,j]=apply(cb,1,sumlog)}
 qu[,t,j]=qu[,t,j]+dmvnorm(y[,t,],xi[k[t],j,],diag(sigma[k[t],j,]^2),log=TRUE)}
 
@@ -27,7 +27,7 @@ qu[,t,j]=dmvnorm(y[,t,],xi[k[t],j,],diag(sigma[k[t],j,]^2),log=TRUE)+qu[,t-1,1]+
 
     if(k[Ti]>1) {
         cb=qu[,Ti,1:k[Ti]]
-        cb[ cb < -743.7]=-743.7
+        cb[ cb < -700]=-700
 liks=apply(cb,1,sumlog)}
 if(k[Ti]==1) {liks=qu[,Ti,1]}
 res=sum(liks)
@@ -41,7 +41,7 @@ if(k[t+1]>1) {
 for(j in 2:k[t+1]) {
     jnk=dmvnorm(y[,t+1,],xi[k[t+1],j,],diag(sigma[k[t+1],j,]^2),log=TRUE)+qub[,t+1,j]+log(PI[k[t],k[t+1],c,j])
     cb=cbind(qub[,t,c],jnk)
-    cb[ cb < -743.7]=-743.7
+    cb[ cb < -700]=-700
 qub[,t,c]=apply(cb,1,sumlog)
 }}}}
 
@@ -58,7 +58,7 @@ if(all(k==1)) {
 
 xi=apply(y,3,mean)
 sigma=apply(y,3,sd)
-lik=dmvnorm(matrix(y,ncol=r),xi,diag(sigma^2),log=TRUE)
+lik=sum(dmvnorm(matrix(y,ncol=r),xi,diag(sigma^2),log=TRUE))
 aic=-2*lik+2*2*r
 bic=-2*lik+log(n)*2*r
 return(list(V=array(1,c(n,Ti,1)),pi=1,PI=1,xi=xi,sigma=sigma,lik=lik,aic=aic,bic=bic))
