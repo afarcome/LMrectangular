@@ -49,4 +49,16 @@ Bartolucci and Farcomeni (2015) - Biometrics and Farcomeni (2017) - Biometrical 
 
 c) probably due to the large number of clusters in the face of a low sample size, the likelihood is not very steep as a function of PI. This results in certain values of PI not being updated much at the M step (when lambda>0), unless parameter hits is slightly increased from its default. 
 
+Secondly, 
+
+source("sensitivityB.r")
+
+reproduces the sensitivity analysis with respect to tuning parameter B, with 
+possible values Bs=c(10,50,100,200,500).
+
+Two lists are obtained, one named rlB where
+
+rlB[[i]] is the outcome when lambda=0.3 and B=Bs[i] with the initial solution based on k=rep(3,6); 
+
+another named rlB2 where rlB2[[i]] is the same with initial solution based on k=rep(4,6). 
 
