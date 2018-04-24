@@ -34,7 +34,7 @@ country whose values are recorded in y[i,,]
 rl: list of results of function rlm, where rl[[i]] corresponds to a
 penalty parameter x[i]
 
-crit: (lik[i]-lik[i-1])/(mean(lik)(x[i]-x[i-1])), where x[min(crit)+1] is the optimal lambda as defined in the paper
+crit: (lik[i]-lik[i-1])/(mean(lik)(x[i]-x[i-1])), where x[which.n(crit)] is the optimal lambda as defined in the paper
 
 A few notes: 
 
