@@ -10,7 +10,7 @@ where pop is Population and the other variable names are
 auto-explicative. 
 
 Results are in R workspace rl.rda, which can be reproduced (it takes
-about 45 minutes) by executing 
+about 1.5 hours) by executing 
 
 source("dataAnalysis.r")
 
@@ -18,7 +18,7 @@ This replaces file rl.rda with an identical one.
 
 PLEASE NOTE THAT THE FILE ABOVE IS SET UP SIMPLY FOR PURPOSES OF REPRODUCING 
 THE DATA ANALYSIS IN THE PAPER SWIFTLY. WITH A NEW DATA SET A MULTISTART APPROACH WITH A FEW DIFFERENT INITIAL STARTING SOLUTIONS (POSSIBLY WELL CHOSEN) 
-ARE RECOMMENDED. 
+ARE RECOMMENDED. THE HOT STARTING / PRETRAINING inits0 IS NEVERTHELESS A GOOD STARTING POINT IN GENERAL. 
 
 The results workspace rl.rda contains:
 
@@ -42,11 +42,11 @@ A few notes:
 
 -- these data set actually makes a good example of basically all problems that can occurr with rlm and rlm.fixed: 
 
-a) latent transitions are unlikely, making some PI[,,i,j] close to zero when i!=j. This might lead the code to numerical issues when lambda=0, and can be avoided using a high tolerance for convergence 
+a) latent transitions are unlikely, making some PI[,,i,j] close to zero when i!=j or, worse, PI[,,i,i] close to 1. This might lead the code to numerical issues which can be avoided using a high tolerance for convergence 
 
-b) probably due to the low sample size, local optima are abundant for this data set. This problem is much less apparent for the usual sample size for latent Markov models (n in the order of the thousand more or less). Refer also to 
-Bartolucci and Farcomeni (2015) - Biometrics on this. 
+b) due to the low sample size (LM models are more common for larger n), local optima are abundant for this data set. Refer also to 
+Bartolucci and Farcomeni (2015) - Biometrics and Farcomeni (2017) - Biometrical Journal on this point. 
 
-c) probably due to the large number of clusters in the face of a low sample size, the likelihood is not very steep as a function of PI. This results in certain values of PI not being updated much at the M step (when lambda>0), unless hits is slightly increased from its default. 
+c) probably due to the large number of clusters in the face of a low sample size, the likelihood is not very steep as a function of PI. This results in certain values of PI not being updated much at the M step (when lambda>0), unless parameter hits is slightly increased from its default. 
 
 

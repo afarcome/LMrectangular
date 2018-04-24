@@ -40,8 +40,8 @@ V: n by T by kmax array, where V[i,t,d] is the posterior probability
 that the i-th subject is in latent state d at time t. 
 
 pi: kmax by kmax matrix, where pi[k[1],d] gives the prior probability
-of being in latent state d at time T=1. Note that for j different that
-k[1] the initial solution is returned, which can be ignored. 
+of being in latent state d at time T=1. Note that pi[j,], when k[1] != j, 
+corresponds to the initial solution and shall be ignored. 
 
 PI: kmax by kmax by kmax by kmax array, where PI[a,b,c,d] gives the
 prior probability that a subject would switch from state c at time t-1
@@ -92,7 +92,7 @@ candidate EM iterations: only the current initial candidate solution
 is considered. If cmax>1, the current initial candidate solution is
 improved through cmax-1 candidate EM iterations. 
 
-hits: number of iterations of the optim numerical optimizer for updating pi and PI at each step (ignored when lambda=0). Defaults to 20. Increase if any element of pi or PI at convergence is equal to the inits. 
+hits: number of iterations of the optim numerical optimizer for updating pi and PI at each step (ignored when lambda=0). Defaults to 20. Increase if any element of pi or PI at convergence is equal to the inits inappropriately.
 
 The function returns a list with elements as that of rlm.fixed, plus
 

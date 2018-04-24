@@ -19,8 +19,21 @@ set.seed(12345)
 
 rl=list()
 
+# pre-training for good inits 
 inits0=rlm.fixed(y,c(4,4,4,3,3,3))
 inits0$k=rep(4,6)
+pt=rlm.fixed(y,c(2,3,2,2,4,2))
+inits0$pi[2,]=pt$pi[2,]
+inits0$PI[2,2,,]=pt$PI[2,2,,]
+inits0$PI[3,2,,]=pt$PI[3,2,,]
+inits0$PI[2,3,,]=pt$PI[2,3,,]
+inits0$PI[2,4,,]=pt$PI[2,4,,]
+inits0$PI[4,2,,]=pt$PI[4,2,,]
+inits0$xi[2,,]=pt$xi[2,,]
+inits0$sigma[2,,]=pt$sigma[2,,]
+pt=rlm.fixed(y,c(3,4,3,4,3,4))
+inits0$pi[3,]=pt$pi[3,]
+inits0$PI[3,4,,]=pt$PI[3,4,,]
 
 rl[[1]]=rlm(y,0,4,inits=inits0)
 
