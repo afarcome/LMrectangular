@@ -1,4 +1,4 @@
-Files in this folder provide the main functions for fitting rectangular latent Markov models. 
+Files in this folder provide the main functions for fitting rectangular latent Markov models under the assumption of diagonal cluster-specific covariance matrices. 
 
 source("codeKvariable.r")
 
