@@ -56,9 +56,7 @@ source("sensitivityB.r")
 reproduces the sensitivity analysis with respect to tuning parameter B, with 
 possible values Bs=c(10,50,100,200,500).
 
-Two lists are obtained, one named rlB where
+As result a list is obtained, named rlB, where
 
-rlB[[i]] is the outcome when lambda=0.3 and B=Bs[i] with the initial solution based on k=rep(3,6); 
-
-another named rlB2 where rlB2[[i]] is the same with initial solution based on k=rep(4,6). 
+rlB[[i]] is the outcome when lambda=0 and B=Bs[i].
 
