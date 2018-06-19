@@ -62,7 +62,7 @@ lik=lik+lambda*n*sum(jnk2*log(jnk2))
 }
 return(lik)}
 
-likco=function(xi,sigma,pi,PI,k,kmax,n,Ti) {
+likco=function(y,xi,sigma,pi,PI,k,kmax,n,Ti) {
 
 qu=array(NA,c(n,Ti,kmax))
 
@@ -159,7 +159,7 @@ PI[j,h,1:j,1:h]=PI[j,h,1:j,1:h]/sum(PI[j,h,1:j,1:h])
 }
 ## E-step ##
 
-lst=likco(xi,sigma,pi,PI,k,kmax,n,Ti)
+lst=likco(y,xi,sigma,pi,PI,k,kmax,n,Ti)
 
 qu=lst$qu
 lik=lst$lik

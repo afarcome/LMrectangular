@@ -1,7 +1,7 @@
 library(snipEM)
 library(mvtnorm)
 
-likco.fixed=function(xi,sigma,pi,PI,k,kmax,n,Ti) {
+likco.fixed=function(y,xi,sigma,pi,PI,k,kmax,n,Ti) {
 
 qu=array(NA,c(n,Ti,kmax))
 
@@ -114,7 +114,7 @@ PI[j,h,1:j,1:h]=PI[j,h,1:j,1:h]/sum(PI[j,h,1:j,1:h])
 }
 ## E-step ##
 
-lst=likco.fixed(xi,sigma,pi,PI,k,kmax,n,Ti)
+lst=likco.fixed(y,xi,sigma,pi,PI,k,kmax,n,Ti)
 
 qu=lst$qu
 lik=lst$lik
@@ -151,7 +151,7 @@ pi[k[1],1:k[1]]=apply(V[,1,1:k[1]],2,sum)
 pi[k[1],]=pi[k[1],]/sum(pi[k[1],1:k[1]])
 }
 if(debug) {
-lkpartial=likco.fixed(xi,sigma,pi,PI,k,kmax,n,Ti)$lik
+lkpartial=likco.fixed(y,xi,sigma,pi,PI,k,kmax,n,Ti)$lik
 if(lik-lkpartial>0) {print("problems with pi!!!")}}
 
 #if(verbose) {print("## update hidden transitions")}
@@ -168,7 +168,7 @@ PI[j,h,1,1:h]=exp(Z[j,h,1,1:h]-sumlog(Z[j,h,1,1:h]))}
 PI[PI<1e-32]=1e-32   
 if(debug) {
 lkpartold=lkpartial
-lkpartial=likco.fixed(xi,sigma,pi,PI,k,kmax,n,Ti)$lik
+lkpartial=likco.fixed(y,xi,sigma,pi,PI,k,kmax,n,Ti)$lik
 if(lkpartold-lkpartial>0) {print(paste("problems with PI at iteration",iters,"!!!"))}}
 
 #if(verbose) {print("## update xi & sigma")}
@@ -187,11 +187,11 @@ sigma[ks,1:ks,]=sigma[ks,1:ks,][o,]}
 
 if(debug) {
 lkpartold=lkpartial
-lkpartial=likco.fixed(xi,sigma,pi,PI,k,kmax,n,Ti)$lik
+lkpartial=likco.fixed(y,xi,sigma,pi,PI,k,kmax,n,Ti)$lik
 if(lkpartold-lkpartial>0) {print(paste("problems with xi or sigma at iteration",iters,"!!!"))}}
 
 if(verbose) {print("## E-step")}
-lst=likco.fixed(xi,sigma,pi,PI,k,kmax,n,Ti)
+lst=likco.fixed(y,xi,sigma,pi,PI,k,kmax,n,Ti)
 
 lkold=lik 
 
